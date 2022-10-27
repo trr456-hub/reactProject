@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
 
-function App() {
-  const [counter, setValue] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const onClick = () => setValue(prev => prev + 1);
-  const onChange = (event) => setKeyword(event.target.value);
+function Hello() {
   useEffect(() => {
-    console.log("나는 한번만 실행돼요");
+    console.log("hi:)");
+    return () => console.log("bye:(");
   }, []);
-  useEffect(() => {
-    console.log("나는 키워드가 변화할 때 실행되요.")
-  }, [keyword]);
-  useEffect(() => {
-    console.log("나는 카운터가 변화할 때 실행되요.")
-  }, [counter]);
-  useEffect(() => {
-    console.log("키워드가 변화합니다. & 카운터가 변화합니다.")
-  }, [keyword,counter]);
+  useEffect(function() {
+    console.log("hi:)");
+    return function(){
+     console.log("bye:("); 
+    }
+  }, []);
+  return <h1>안녕하세요</h1>
+}; 
+
+function App() {
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing(prev => !prev);
   return (
     <div>
-      <input value={keyword} onChange={onChange} type="text" placeholder="검색" />
-      <h1>{counter}</h1>
-      <button onClick={onClick}>클릭</button>
+      {showing ? <Hello /> : null}
+      <button onClick={onClick}>{showing ? "Hide" : "Show"}</button>
     </div>
-  );
+  )
 }
 
 export default App;

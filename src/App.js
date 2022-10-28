@@ -1,36 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
-    const [toDo, setToDo] = useState("");
-    const [toDos, setToDos] = useState([]);
-    const onChange = (event) => setToDo(event.target.value);
-    const onSubmit = (event) => {
-        event.preventDefault();
-        if (toDo === "") {
-            return;
-        }
-        setToDos(currentArray => [
-            toDo, ...currentArray
-        ]);
-        setToDo("");
-    }
-    console.log(toDos);
+  const [loading,setLoading] = useState(true);
+  const [coins,setCoins] = useState([]);
+  useEffect(() =>{
+    fetch("https://api.coinpaprika.com/v1/tickers")
+    .then((response) => response.json())
+    .then((json) => {
+    setCoins(json)
+    setLoading(false);
+  });
+  }, []) //빈 배열을 두면 한번만 실행 
     return (
-        <div>
-            <h1>내가할일 {toDos.length}</h1>
-            <form onSubmit={onSubmit}>
-                <input
-                    onChange={onChange}
-                    value={toDo}
-                    type="text"
-                    placeholder="to-do-list-write"/>
-                <button>추가버튼</button>
-            </form>
-            <hr/>
-            <ul>
-                {toDos.map((item, index) => (<li key={index}>{item}</li>))}
-            </ul>
-        </div>
+    <div>
+    <h1>코인시세({coins.length})</h1>
+    <input type="text" placeholder="보유한 현금"/> <p/>
+    { loading ?
+    <strong>...로딩중</strong>
+    :
+    <select>
+        { coins.map( (coin) =>
+        <option key={coin.id}>{coin.name} ({coin.symbol}) : {coin.quotes.USD.price} USD</option>
+        ) }
+    </select>
+    }
+
+</div>
     )
 }
 

@@ -1,20 +1,24 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-function Movie({ id,coverImg, title, summary, genres }) {
-    return <div>
-        <img src={coverImg} alt={title} />
-        <h2>
-            <Link to={`/movie/${id}`}>{title}</Link>
-        </h2>
-        {/* a태그를 사용해도 되지만 페이지가 전체 세로고침이된다.
-            <Link to=""> router-dom 을 사용해 페이지 이동후에도 페이지 의 새로고침을 막는다.
-        */}
-        <p>{summary}</p>
-        <ul>
-            {genres.map((g) => <li key={g}>{g}</li>)}
-        </ul>
-    </div>;
-}
+import styles from "./Movie.module.css";
+
+function Movie({ id, coverImg, title, year, summary, genres }) {
+    return <div className={styles.movie}>
+        <img src={coverImg} alt={title} className={styles.movie__img} />
+        <div>
+            <h2 className={styles.movie__title}>
+                <Link to={`/movie/${id}`}>{title}</Link>
+            </h2>
+            <h3 className={styles.movie__year}>{year}</h3>
+            <p>{summary.length > 235 ? `${summary.slice(0, 235)}...` : summary}</p>
+            <ul className={styles.movie__genres}>
+                {genres.map((g) => (
+                    <li key={g}>{g}</li>
+                ))}
+            </ul>
+        </div>
+    </div>
+}  
 
 Movie.propTypes = {
     id: PropTypes.number.isRequired,
